@@ -8,12 +8,13 @@ var todos = document.querySelectorAll("input[type=checkbox]");
 
 function updateTodo(id, completed) {
   // revisen si completed es booleano o string
+  //var completed = $("#password").val();
   json_to_send = {
     "completed" : completed
   };
   json_to_send = JSON.stringify(json_to_send);
   $.ajax({
-      url: 'http://localhost:3000/todos/' + id,
+      url: 'https://examenfinallizzie.herokuapp.com/todos/' + id,
       // url: 'https://tuapp.herokuapp.com/todos',
       headers: {
           'Content-Type':'application/json',
@@ -34,7 +35,7 @@ function updateTodo(id, completed) {
 
 function loadTodos() {
   $.ajax({
-    url: 'http://localhost:3000/todos',
+    url: 'https://examenfinallizzie.herokuapp.com/todos',
     // url: 'https://tuapp.herokuapp.com/todos',
     headers: {
         'Content-Type':'application/json',
@@ -44,12 +45,12 @@ function loadTodos() {
     dataType: 'json',
     success: function(data){
       console.log(data)
-
       for( let i = 0; i < data.length; i++) {
         // aqui va su código para agregar los elementos de la lista
         console.log(data[i].description)
         // algo asi:
         // addTodo(data[i]._id, data[i].description, data[i].completed)
+        addTodo(data[i]._id, data[i].description, data[i].completed);
       }
     },
     error: function(error_msg) {
@@ -59,8 +60,6 @@ function loadTodos() {
 }
 
 loadTodos()
-
-
 // o con jquery
 // $('input[name=newitem]').keypress(function(event){
 //     var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -73,13 +72,14 @@ var input = document.querySelector("input[name=newitem]");
 
 input.addEventListener('keypress', function (event) {
   if (event.charCode === 13) {
+    addTodo();
     json_to_send = {
       "description" : input.value
     };
     json_to_send = JSON.stringify(json_to_send);
     $.ajax({
-      url: 'http://localhost:3000/todos',
-      // url: 'https://tuapp.herokuapp.com/todos',
+      //url: 'http://localhost:3000/todos',
+      url: 'https://examenfinallizzie.herokuapp.com/todos',
       headers: {
           'Content-Type':'application/json',
           'Authorization': 'Bearer ' + token
@@ -100,5 +100,6 @@ input.addEventListener('keypress', function (event) {
 })
 
 function addTodo(id, todoText, completed) {
-  
+  $("#unfinished-list").append(
+  '<li><input type="checkbox" name="todo" value='+id+'><span>'+todoText+'</span></li>')
 }
