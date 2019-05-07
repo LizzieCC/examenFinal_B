@@ -8,6 +8,7 @@ var todos = document.querySelectorAll("input[type=checkbox]");
 
 function updateTodo(id, completed) {
   // revisen si completed es booleano o string
+
   //var completed = $("#password").val();
   json_to_send = {
     "completed" : completed
@@ -72,7 +73,6 @@ var input = document.querySelector("input[name=newitem]");
 
 input.addEventListener('keypress', function (event) {
   if (event.charCode === 13) {
-    addTodo();
     json_to_send = {
       "description" : input.value
     };
@@ -89,7 +89,7 @@ input.addEventListener('keypress', function (event) {
       data: json_to_send,
       success: function(data){
         console.log(data)
-        
+        addTodo(data._id, data.description, data.completed);
       },
       error: function(error_msg) {
         alert((error_msg['responseText']));
@@ -100,6 +100,11 @@ input.addEventListener('keypress', function (event) {
 })
 
 function addTodo(id, todoText, completed) {
-  $("#unfinished-list").append(
-  '<li><input type="checkbox" name="todo" value='+id+'><span>'+todoText+'</span></li>')
+  if(completed){
+    $("#unfinished-list").append(
+      '<li><input type="checkbox" name="todo" value='+id+' checked><span>'+todoText+'</span></li>')
+  }else{
+    $("#unfinished-list").append(
+      '<li><input type="checkbox" name="todo" value='+id+'><span>'+todoText+'</span></li>')
+  }
 }
